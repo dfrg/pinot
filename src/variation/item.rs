@@ -67,7 +67,7 @@ impl<'a> Store<'a> {
     }
 
     /// Returns the number of "outer" sets.
-    pub fn num_outer_set(&self) -> u16 {
+    pub fn num_outer_sets(&self) -> u16 {
         self.num_outer_sets
     }
 
