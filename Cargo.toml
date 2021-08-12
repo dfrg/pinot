@@ -1,0 +1,12 @@
+[package]
+name = "pinot"
+version = "0.1.0"
+authors = ["Chad Brokaw <cbrokaw@gmail.com>"]
+edition = "2018"
+description = "Fast, high-fidelity, zero-copy OpenType parser."
+license = "MIT OR Apache-2.0"
+keywords = ["font", "parse", "opentype"]
+categories = ["graphics", "text-processing"]
+repository = "https://github.com/dfrg/pinot"
+homepage = "https://github.com/dfrg/pinot"
+readme = "README.md"
