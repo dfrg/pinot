@@ -444,17 +444,17 @@ impl<'a> Windows<'a> {
         self.0.read(8).unwrap_or(0)
     }
 
-    /// Returns the recommended horizontal size units for subscripts.
+    /// Returns the recommended horizontal size for subscripts.
     pub fn subscript_x_size(&self) -> FWord {
         self.0.read(10).unwrap_or(0)
     }
 
-    /// Returns the recommended vertical size units for subscripts.
+    /// Returns the recommended vertical size for subscripts.
     pub fn subscript_y_size(&self) -> FWord {
         self.0.read(12).unwrap_or(0)
     }
 
-    /// Returns the recommended horizontal offset units for subscripts.
+    /// Returns the recommended horizontal offset for subscripts.
     pub fn subscript_x_offset(&self) -> FWord {
         self.0.read(14).unwrap_or(0)
     }
@@ -464,22 +464,22 @@ impl<'a> Windows<'a> {
         self.0.read(16).unwrap_or(0)
     }
 
-    /// Returns the recommended horizontal size units for subscripts.
+    /// Returns the recommended horizontal size for superscripts.
     pub fn superscript_x_size(&self) -> FWord {
         self.0.read(18).unwrap_or(0)
     }
 
-    /// Returns the recommended vertical size in for subscripts.
+    /// Returns the recommended vertical size for superscripts.
     pub fn superscript_y_size(&self) -> FWord {
         self.0.read(20).unwrap_or(0)
     }
 
-    /// Returns the recommended horizontal offset for subscripts.
+    /// Returns the recommended horizontal offset for superscripts.
     pub fn superscript_x_offset(&self) -> FWord {
         self.0.read(22).unwrap_or(0)
     }
 
-    /// Returns the recommended vertical offset for subscripts.
+    /// Returns the recommended vertical offset for superscripts.
     pub fn superscript_y_offset(&self) -> FWord {
         self.0.read(24).unwrap_or(0)
     }

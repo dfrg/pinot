@@ -179,21 +179,21 @@ pub struct Windows {
     /// - 9: Bitmap embedding only
     /// - 10-15: Reserved (set to 0)
     pub type_flags: u16,
-    /// Recommended horizontal size units for subscripts.
+    /// Recommended horizontal size for subscripts.
     pub subscript_x_size: FWord,
-    /// Recommended vertical size units for subscripts.
+    /// Recommended vertical size for subscripts.
     pub subscript_y_size: FWord,
-    /// Recommended horizontal offset units for subscripts.
+    /// Recommended horizontal offset for subscripts.
     pub subscript_x_offset: FWord,
     /// Recommended vertical offset for subscripts.
     pub subscript_y_offset: FWord,
-    /// Recommended horizontal size units for subscripts.
+    /// Recommended horizontal size for superscripts.
     pub superscript_x_size: FWord,
-    /// Recommended vertical size in for subscripts.
+    /// Recommended vertical size for superscripts.
     pub superscript_y_size: FWord,
-    /// Recommended horizontal offset for subscripts.
+    /// Recommended horizontal offset for superscripts.
     pub superscript_x_offset: FWord,
-    /// Recommended vertical offset for subscripts.
+    /// Recommended vertical offset for superscripts.
     pub superscript_y_offset: FWord,
     /// Suggested thickness for the strikeout stroke.
     pub strikeout_size: FWord,
@@ -312,15 +312,15 @@ pub struct MaxProfile {
 /// <https://docs.microsoft.com/en-us/typography/opentype/spec/post>
 #[derive(Copy, Clone, Default, Debug)]
 pub struct PostScript {
-    /// Returns the version of the PostScript table.
+    /// Version of the table.
     pub version: Fixed,
-    /// Returns the italic angle in counter-clockwise degrees from the vertical.
+    /// Italic angle in counter-clockwise degrees from the vertical.
     pub italic_angle: Fixed,
-    /// Returns the suggested offset of the top of the underline stroke from
+    /// Suggested offset of the top of the underline stroke from
     /// the baseline.
     pub underline_position: FWord,
-    /// Returns the suggested thickness for the underline stroke.
+    /// Suggested thickness for the underline stroke.
     pub underline_thickness: FWord,
-    /// Returns true if the font is not proportionally spaced (i.e. monospaced).
+    /// True if the font is not proportionally spaced (i.e. monospaced).
     pub is_fixed_pitch: bool,
 }

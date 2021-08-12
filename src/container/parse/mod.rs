@@ -11,17 +11,17 @@ pub use slice::Slice;
 pub struct Buffer<'a>(pub &'a [u8]);
 
 impl<'a> Buffer<'a> {
-    /// Creates a new data instance for the specified bytes.
+    /// Creates a new buffer for the specified bytes.
     pub fn new(bytes: &'a [u8]) -> Self {
         Self(bytes)
     }
 
-    /// Creates a new data instance for the specified bytes and offset.
+    /// Creates a new buffer for the specified bytes and offset.
     pub fn with_offset(bytes: &'a [u8], offset: usize) -> Option<Self> {
         Some(Self(bytes.get(offset..)?))
     }
 
-    /// Creates a new data instance with the specified range of bytes.
+    /// Creates a new buffer with the specified range of bytes.
     pub fn with_range(bytes: &'a [u8], range: Range<usize>) -> Option<Self> {
         Some(Self(bytes.get(range)?))
     }

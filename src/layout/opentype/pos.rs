@@ -748,7 +748,7 @@ impl ValueFormat {
 /// Component of a value or anchor.
 #[derive(Copy, Clone, Default, Debug)]
 pub struct Component {
-    /// Raw value in font units.
+    /// Value in font units.
     pub value: FWord,
     /// Outer and inner indices for the item variation store.
     pub delta_indices: Option<[u16; 2]>,
@@ -768,7 +768,7 @@ impl Component {
     }
 }
 
-/// Raw value of a position adjustment in font units.
+/// Value of a position adjustment in font units.
 ///
 /// <https://docs.microsoft.com/en-us/typography/opentype/spec/gpos#value-record>
 #[derive(Copy, Clone, Default, Debug)]
@@ -818,7 +818,7 @@ impl core::fmt::Display for Value {
     }
 }
 
-/// Raw value of an anchor in font units.
+/// Value of an anchor in font units.
 ///
 /// <https://docs.microsoft.com/en-us/typography/opentype/spec/gpos#anchor-tables>
 #[derive(Copy, Clone, Default, Debug)]
@@ -838,7 +838,10 @@ impl<'a> Subtable<'a> {
         do_var: bool,
     ) -> Option<Value> {
         let d = self.data();
-        let mut pos =  Value { format, ..Default::default() };
+        let mut pos = Value {
+            format,
+            ..Default::default()
+        };
         if format.0 == 4 {
             pos.x_advance.value = d.read_i16(offset)?;
             return Some(pos);

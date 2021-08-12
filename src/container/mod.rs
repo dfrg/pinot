@@ -220,7 +220,7 @@ pub struct FontDataRef<'a> {
 }
 
 impl<'a> FontDataRef<'a> {
-    /// Creates a font data reference for the specified data.
+    /// Creates a font data reference from the specified data.
     pub fn from_data(data: &'a [u8]) -> Option<Self> {
         let _ = FontDataKind::from_data(data, 0)?;
         Some(Self { data })

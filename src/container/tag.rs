@@ -5,7 +5,7 @@ use core::fmt;
 /// Four byte tag value used to identify various resources.
 pub type Tag = u32;
 
-/// Creates a tag from an array.
+/// Creates a tag from a byte array.
 pub const fn from_bytes(bytes: &[u8; 4]) -> Tag {
     (bytes[0] as u32) << 24 | (bytes[1] as u32) << 16 | (bytes[2] as u32) << 8 | bytes[3] as u32
 }

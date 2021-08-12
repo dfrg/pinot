@@ -1,9 +1,9 @@
 //! OpenType layout.
-//! 
+//!
 //! The module covers the specification at <https://docs.microsoft.com/en-us/typography/opentype/spec/ttochap1>.
 //! Documentation is currently sparse, but the main entry points are [`GlyphDef`] for access to the `GDEF`
 //! table and [`Layout`] for access to the `GSUB` and `GPOS` tables.
-//! 
+//!
 
 mod context;
 mod def;
@@ -23,8 +23,8 @@ pub use pos::*;
 pub use shared::{ClassDef, Coverage, CoverageArray, Covered};
 pub use sub::*;
 pub use table::{
-    Condition, ConditionSet, Feature, FeatureIndex, FeatureRecord, FeatureSubst, FeatureVariations,
-    Language, LanguageRecord, Script, ScriptRecord,
+    Condition, ConditionSet, Feature, FeatureRecord, FeatureSubst, FeatureVariations, Language,
+    LanguageRecord, Script, ScriptRecord,
 };
 
 use crate::container::prelude::*;

@@ -2,7 +2,7 @@ use super::{GlyphDef, Layout, Lookup, LookupFilter, LookupFlag, LookupKind, Look
 use crate::container::prelude::*;
 
 impl<'a> Layout<'a> {
-    /// Creates a new stage table for the specified stage, table data,
+    /// Creates a new layout table for the specified stage, table data,
     /// and glyph definitions. The table data should contain a `GSUB` or
     /// `GPOS` table matching the specified stage.
     pub fn new(stage: Stage, data: &'a [u8], glyphs: Option<GlyphDef<'a>>) -> Self {
@@ -596,8 +596,8 @@ impl<'a> FeatureSubst<'a> {
         self.len == 0
     }
 
-    /// Returns the feature index and substitution at the specified index.
-    pub fn get(&self, index: u16) -> Option<(FeatureIndex, Feature<'a>)> {
+    /// Returns the feature substitution at the specified index.
+    pub fn get(&self, index: u16) -> Option<Feature<'a>> {
         if index >= self.len() {
             return None;
         }
@@ -605,30 +605,29 @@ impl<'a> FeatureSubst<'a> {
         let subst_base = self.base + 6 + index as usize * 6;
         let feature_index = data.read_u16(subst_base)?;
         let offset = data.read_offset32(subst_base + 2, self.base as u32)?;
-        Some((
-            feature_index,
+        Some(
             FeatureRecord {
                 tag: 0,
                 index: feature_index,
                 offset,
             }
             .materialize(self.layout),
-        ))
+        )
     }
 
     /// Returns an iterator over the feature substitutions.
-    pub fn iter(&'a self) -> impl Iterator<Item = (FeatureIndex, Feature<'a>)> + 'a + Clone {
+    pub fn iter(&'a self) -> impl Iterator<Item = Feature<'a>> + 'a + Clone {
         (0..self.len).filter_map(move |index| self.get(index))
     }
 
     /// Returns the substitution for the feature at the specified index.
-    pub fn find(&self, feature_index: FeatureIndex) -> Option<Feature<'a>> {
+    pub fn find(&self, feature_index: u16) -> Option<Feature<'a>> {
         for i in 0..self.len() {
-            if let Some((index, feature)) = self.get(i) {
-                if index == feature_index {
+            if let Some(feature) = self.get(i) {
+                if feature.record.index == feature_index {
                     return Some(feature);
                 }
-                if index > feature_index {
+                if feature.record.index > feature_index {
                     return None;
                 }
             }
@@ -636,6 +635,3 @@ impl<'a> FeatureSubst<'a> {
         None
     }
 }
-
-/// Type alias for the index of a feature in a layout table.
-pub type FeatureIndex = u16;

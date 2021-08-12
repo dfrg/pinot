@@ -79,7 +79,7 @@ impl<'a> GlyphDef<'a> {
         }
     }
 
-    /// Returns true if mark coverage sets are available.
+    /// Returns true if mark filtering sets are available.
     pub fn has_mark_sets(&self) -> bool {
         self.mark_sets != 0
     }
@@ -95,12 +95,12 @@ impl<'a> GlyphDef<'a> {
         }
     }
 
-    /// Returns the mark set at the specified index.
+    /// Returns the mark filtering set at the specified index.
     pub fn mark_set(&self, index: u16) -> Option<Coverage<'a>> {
         Some(Coverage::new(self.data, self.mark_set_offset(index)?))
     }
 
-    /// Returns an iterator over the mark coverage sets.
+    /// Returns an iterator over the mark filtering sets.
     pub fn mark_sets(&self) -> impl Iterator<Item = Coverage<'a>> + '_ + Clone {
         let len = self.num_mark_sets();
         (0..len).map(move |index| {
