@@ -166,29 +166,29 @@ pub unsafe fn _get_coverage_unchecked(
     let len = b.read_unchecked::<u16>(base + 2) as usize;
     let arr = base + 4;
     if fmt == 1 {
-        let mut l = 0;
-        let mut h = len;
-        while l < h {
+        let mut lo = 0;
+        let mut hi = len;
+        while lo < hi {
             use core::cmp::Ordering::*;
-            let i = (l + h) / 2;
+            let i = (lo + hi) / 2;
             let g = b.read_unchecked::<u16>(arr + i * 2);
             match glyph_id.cmp(&g) {
-                Less => h = i,
-                Greater => l = i + 1,
+                Less => hi = i,
+                Greater => lo = i + 1,
                 Equal => return Some(i as u16),
             }
         }
     } else if fmt == 2 {
-        let mut l = 0;
-        let mut h = len;
-        while l < h {
-            let i = (l + h) / 2;
+        let mut lo = 0;
+        let mut hi = len;
+        while lo < hi {
+            let i = (lo + hi) / 2;
             let rec = arr + i * 6;
             let start = b.read_unchecked::<u16>(rec);
             if glyph_id < start {
-                h = i;
+                hi = i;
             } else if glyph_id > b.read_unchecked::<u16>(rec + 2) {
-                l = i + 1;
+                lo = i + 1;
             } else {
                 let base = b.read_unchecked::<u16>(rec + 4);
                 return Some(base + glyph_id - start);
@@ -210,15 +210,15 @@ pub fn get_coverage(b: &Buffer, coverage_offset: u32, glyph_id: u16) -> Option<u
         if !b.check_range(arr, len * 2) {
             return None;
         }
-        let mut l = 0;
-        let mut h = len;
-        while l < h {
+        let mut lo = 0;
+        let mut hi = len;
+        while lo < hi {
             use core::cmp::Ordering::*;
-            let i = (l + h) / 2;
+            let i = (lo + hi) / 2;
             let g = unsafe { b.read_unchecked::<u16>(arr + i * 2) };
             match glyph_id.cmp(&g) {
-                Less => h = i,
-                Greater => l = i + 1,
+                Less => hi = i,
+                Greater => lo = i + 1,
                 Equal => return Some(i as u16),
             }
         }

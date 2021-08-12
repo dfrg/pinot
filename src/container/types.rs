@@ -14,7 +14,7 @@ pub type F2dot14 = i16;
 pub type FWord = i16;
 
 /// Unsigned 16-bit value in font units.
-pub type UFWord = u16;
+pub type UfWord = u16;
 
 /// Glyph identifier.
 pub type GlyphId = u16;

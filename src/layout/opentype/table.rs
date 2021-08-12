@@ -452,6 +452,11 @@ impl<'a> FeatureVariations<'a> {
         self.len
     }
 
+    /// Returns true if there are no condition sets.
+    pub fn is_empty(&self) -> bool {
+        self.len == 0
+    }
+
     /// Returns the condition set at the specified index.
     pub fn get(&self, index: u32) -> Option<ConditionSet<'a>> {
         if index >= self.len {
@@ -513,6 +518,11 @@ impl<'a> ConditionSet<'a> {
     /// Returns the number of conditions in the set.
     pub fn len(&self) -> u16 {
         self.len
+    }
+
+    /// Returns true if the set is empty.
+    pub fn is_empty(&self) -> bool {
+        self.len == 0
     }
 
     /// Returns the condition at the specified index.
@@ -579,6 +589,11 @@ impl<'a> FeatureSubst<'a> {
     /// Returns the number of feature substitutions.
     pub fn len(&self) -> u16 {
         self.len
+    }
+
+    /// Returns true if the collection is empty.
+    pub fn is_empty(&self) -> bool {
+        self.len == 0
     }
 
     /// Returns the feature index and substitution at the specified index.

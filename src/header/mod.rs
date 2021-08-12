@@ -197,7 +197,7 @@ impl<'a> HoriHeader<'a> {
     }
 
     /// Returns the maximum advance width.
-    pub fn max_advance(&self) -> UFWord {
+    pub fn max_advance(&self) -> UfWord {
         self.0.read(10).unwrap_or(0)
     }
 
@@ -399,7 +399,7 @@ impl<'a> Windows<'a> {
 
     /// Returns the average advance width of all non-zero width glyphs in the
     /// font.
-    pub fn average_char_width(&self) -> UFWord {
+    pub fn average_char_width(&self) -> UfWord {
         self.0.read(2).unwrap_or(0)
     }
 
@@ -572,13 +572,13 @@ impl<'a> Windows<'a> {
 
     /// Returns a Windows specific value that defines the upper extent of
     /// the clipping region.
-    pub fn win_ascent(&self) -> UFWord {
+    pub fn win_ascent(&self) -> UfWord {
         self.0.read(74).unwrap_or(0)
     }
 
     /// Returns a Windows specific value that defines the lower extent of
     /// the clipping region.
-    pub fn win_descent(&self) -> UFWord {
+    pub fn win_descent(&self) -> UfWord {
         self.0.read(76).unwrap_or(0)
     }
 

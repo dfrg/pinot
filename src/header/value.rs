@@ -81,7 +81,7 @@ pub struct HoriHeader {
     /// Typographic line gap.
     pub line_gap: FWord,
     /// Maximum advance width.
-    pub max_advance: UFWord,
+    pub max_advance: UfWord,
     /// Minimum left side-bearing.
     pub min_lsb: FWord,
     /// Minimum right side-bearing.
@@ -146,7 +146,7 @@ pub struct Windows {
     pub version: u16,
     /// Average advance width of all non-zero width glyphs in the
     /// font.
-    pub average_char_width: UFWord,
+    pub average_char_width: UfWord,
     /// Visual weight class on a scale from 1 to 1000.  
     /// Common values:
     /// - 100: Thin
@@ -237,10 +237,10 @@ pub struct Windows {
     pub typographic_line_gap: FWord,
     /// Windows specific value that defines the upper extent of
     /// the clipping region.
-    pub win_ascent: UFWord,
+    pub win_ascent: UfWord,
     /// Windows specific value that defines the lower extent of
     /// the clipping region.
-    pub win_descent: UFWord,
+    pub win_descent: UfWord,
     /// Windows specific code page ranges supported by the font.
     /// (table version >= 1)
     pub code_page_range: Option<[u32; 2]>,

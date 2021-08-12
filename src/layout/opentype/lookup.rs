@@ -411,7 +411,7 @@ impl SubtableRecord {
     /// must belong to the lookup.
     pub fn materialize<'a>(&self, lookup: &'a Lookup<'a>) -> Subtable<'a> {
         Subtable {
-            lookup: lookup,
+            lookup,
             record: *self,
         }
     }

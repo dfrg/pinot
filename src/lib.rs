@@ -1,4 +1,4 @@
-//! Fast, high-fidelity, zero-copy OpenType parser.
+//! Fast, high-fidelity OpenType parser.
 
 #![no_std]
 

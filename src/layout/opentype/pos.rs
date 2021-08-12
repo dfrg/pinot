@@ -258,10 +258,8 @@ impl<'a> PairPos2<'a> {
                 if let Some(pos) = self.get_by_classes(class1, class2) {
                     let all_zero = pos[0].map(|p| p.all_zero()).unwrap_or(true)
                         && pos[1].map(|p| p.all_zero()).unwrap_or(true);
-                    if !all_zero {
-                        if !f(glyph_id, next_id, pos) {
-                            return false;
-                        }
+                    if !all_zero && !f(glyph_id, next_id, pos) {
+                        return false;
                     }
                 }
                 true
@@ -281,10 +279,8 @@ impl<'a> PairPos2<'a> {
                 if let Some(pos) = self.get_by_classes(class1, class2) {
                     let all_zero = pos[0].map(|p| p.all_zero()).unwrap_or(true)
                         && pos[1].map(|p| p.all_zero()).unwrap_or(true);
-                    if !all_zero {
-                        if !f(class1, class2, pos) {
-                            return Some(false);
-                        }
+                    if !all_zero && !f(class1, class2, pos) {
+                        return Some(false);
                     }
                 }
             }
@@ -842,8 +838,7 @@ impl<'a> Subtable<'a> {
         do_var: bool,
     ) -> Option<Value> {
         let d = self.data();
-        let mut pos = Value::default();
-        pos.format = format;
+        let mut pos =  Value { format, ..Default::default() };
         if format.0 == 4 {
             pos.x_advance.value = d.read_i16(offset)?;
             return Some(pos);

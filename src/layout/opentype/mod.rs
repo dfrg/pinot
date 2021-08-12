@@ -1,4 +1,9 @@
 //! OpenType layout.
+//! 
+//! The module covers the specification at <https://docs.microsoft.com/en-us/typography/opentype/spec/ttochap1>.
+//! Documentation is currently sparse, but the main entry points are [`GlyphDef`] for access to the `GDEF`
+//! table and [`Layout`] for access to the `GSUB` and `GPOS` tables.
+//! 
 
 mod context;
 mod def;
