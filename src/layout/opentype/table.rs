@@ -436,7 +436,7 @@ impl<'a> Feature<'a> {
     }
 }
 
-/// Feature variation support.
+/// Feature variations table.
 ///
 /// <https://docs.microsoft.com/en-us/typography/opentype/spec/chapter2#featurevariations-table>
 #[derive(Copy, Clone)]
@@ -564,7 +564,7 @@ impl<'a> ConditionSet<'a> {
     }
 }
 
-/// Condition for selection a feature substitution.
+/// Condition for selecting a feature substitution.
 ///
 /// <https://docs.microsoft.com/en-us/typography/opentype/spec/chapter2#condition-table>
 #[derive(Copy, Clone, Debug)]
@@ -577,7 +577,9 @@ pub struct Condition {
     pub max_value: NormalizedCoord,
 }
 
-/// Collection of feature substitutions.
+/// Feature substitution table.
+/// 
+/// <https://docs.microsoft.com/en-us/typography/opentype/spec/chapter2#featuretablesubstitution-table>
 #[derive(Copy, Clone)]
 pub struct FeatureSubst<'a> {
     layout: &'a Layout<'a>,

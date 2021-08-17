@@ -165,14 +165,14 @@ impl<'a> Axis<'a> {
 
     /// Returns the sequence of axis value maps the define a modification
     /// within the variation space.
-    pub fn segment_maps(&self) -> Option<SegmentMaps<'a>> {
+    pub fn segment_map(&self) -> Option<SegmentMap<'a>> {
         let mut c = Cursor::new(self.avar?);
         c.skip(8)?;
         for _ in 0..self.index {
             let count = c.read_u16()? as usize;
             c.skip(count * 4)?;
         }
-        Some(SegmentMaps {
+        Some(SegmentMap {
             values: c.read_slice16()?,
         })
     }
@@ -180,14 +180,14 @@ impl<'a> Axis<'a> {
 
 /// Collection of value maps for a single axis.
 #[derive(Copy, Clone, Debug)]
-pub struct SegmentMaps<'a> {
+pub struct SegmentMap<'a> {
     /// Collection of value maps.
     pub values: Slice<'a, AxisValueMap>,
 }
 
-impl<'a> SegmentMaps<'a> {
-    /// Returns a modified copy of the coordinate according to the value maps.
-    pub fn modify(&self, coord: Fixed) -> Fixed {
+impl<'a> SegmentMap<'a> {
+    /// Applies the piecewise linear mapping to the normalized coordinate.
+    pub fn apply(&self, coord: Fixed) -> Fixed {
         let mut prev = AxisValueMap::default();
         for (i, value_map) in self.values.iter().enumerate() {
             use core::cmp::Ordering::*;

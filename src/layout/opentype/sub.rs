@@ -13,6 +13,12 @@ impl<'a> SingleSubst1<'a> {
         self.get_impl(glyph_id.glyph_id())
     }
 
+    /// Single delta value applied to all glyphs covered by the subtable.
+    pub fn delta(&self) -> Option<i16> {
+        let (data, offset) = self.0.data_and_offset();
+        data.read_i16(offset + 4)
+    }
+
     /// Invokes the specified closure with all substitutions in the subtable.
     pub fn substs_with(&self, mut f: impl FnMut(GlyphId, GlyphId) -> bool) -> Option<bool> {
         self.0.coverage().indices_with(|glyph_id, _| {
@@ -26,10 +32,7 @@ impl<'a> SingleSubst1<'a> {
     }
 
     fn get_impl(&self, glyph_id: u16) -> Option<u16> {
-        let delta = self
-            .0
-            .data()
-            .read::<i16>(self.0.record.offset as usize + 4)? as i32;
+        let delta = self.delta()? as i32;
         Some((glyph_id as i32 + delta) as u16)
     }
 }
@@ -58,7 +61,7 @@ impl<'a> SingleSubst2<'a> {
         })
     }
 
-    pub fn get_impl(&self, coverage: u16) -> Option<u16> {
+    fn get_impl(&self, coverage: u16) -> Option<u16> {
         let array_base = self.0.record.offset as usize + 6;
         self.0
             .data()
