@@ -6,6 +6,9 @@ use super::{
     colr::{Colr, COLR},
     cpal::*,
     fvar::*,
+    gdef::*,
+    gpos::*,
+    gsub::*,
     head::*,
     hhea::*,
     hmtx::*,
@@ -310,6 +313,21 @@ pub trait TableProvider<'a> {
     /// Returns the color table.
     fn colr(&self) -> Option<Colr<'a>> {
         Some(Colr::new(self.table_data(COLR)?))
+    }
+
+    /// Returns the glyph definition table.
+    fn gdef(&self) -> Option<Gdef<'a>> {
+        Gdef::new(self.table_data(GDEF)?)
+    }
+
+    /// Returns the glyph substitution table.
+    fn gsub(&self) -> Option<Gsub<'a>> {
+        Some(Gsub::new(self.table_data(GSUB)?, self.gdef()))
+    }
+
+    /// Returns the glyph positioning table.
+    fn gpos(&self) -> Option<Gpos<'a>> {
+        Some(Gpos::new(self.table_data(GPOS)?, self.gdef()))
     }
 }
 
