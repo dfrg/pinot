@@ -2,8 +2,14 @@
 
 #![no_std]
 
+pub mod head;
+pub mod hhea;
+pub mod maxp;
+pub mod os2;
 pub mod parse;
+pub mod post;
 pub mod types;
+pub mod vhea;
 
 /// Helper module for common parsing imports.
 mod parse_prelude {
