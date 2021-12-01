@@ -12,6 +12,10 @@ pub mod post;
 pub mod types;
 pub mod vhea;
 
+mod font;
+
+pub use font::*;
+
 /// Helper module for common parsing imports.
 mod parse_prelude {
     pub use super::parse::*;
