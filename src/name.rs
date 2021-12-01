@@ -59,7 +59,7 @@ pub struct NameRecord {
     /// Language identifier,
     pub language_id: u16,
     /// Name identifier.
-    pub name_id: u16,
+    pub name_id: NameId,
     /// Length of the string in the storage area.
     pub len: u16,
     /// Offset to the string in the storage area.
@@ -166,56 +166,59 @@ impl<'a> Iterator for Decode<'a> {
     }
 }
 
+/// Type for a name identifier.
+pub type NameId = u16;
+
 /// Copyright notice.
-pub const COPYRIGHT_NOTICE: u16 = 0;
+pub const COPYRIGHT_NOTICE: NameId = 0;
 /// Family name.
-pub const FAMILY_NAME: u16 = 1;
+pub const FAMILY_NAME: NameId = 1;
 /// Subfamily name.
-pub const SUBFAMILY_NAME: u16 = 2;
+pub const SUBFAMILY_NAME: NameId = 2;
 /// Unique identifier.
-pub const UNIQUE_ID: u16 = 3;
+pub const UNIQUE_ID: NameId = 3;
 /// Full name.
-pub const FULL_NAME: u16 = 4;
+pub const FULL_NAME: NameId = 4;
 /// Version string.
-pub const VERSION_STRING: u16 = 5;
+pub const VERSION_STRING: NameId = 5;
 /// PostScript name.
-pub const POSTSCRIPT_NAME: u16 = 6;
+pub const POSTSCRIPT_NAME: NameId = 6;
 /// Trademark.
-pub const TRADEMARK: u16 = 7;
+pub const TRADEMARK: NameId = 7;
 /// Manufacturer name.
-pub const MANUFACTURER: u16 = 8;
+pub const MANUFACTURER: NameId = 8;
 /// Designer name.
-pub const DESIGNER: u16 = 9;
+pub const DESIGNER: NameId = 9;
 /// Description of the typeface.
-pub const DESCRIPTION: u16 = 10;
+pub const DESCRIPTION: NameId = 10;
 /// URL of the font vendor.
-pub const VENDOR_URL: u16 = 11;
+pub const VENDOR_URL: NameId = 11;
 /// URL of the font designer.
-pub const DESIGNER_URL: u16 = 12;
+pub const DESIGNER_URL: NameId = 12;
 /// License description.
-pub const LICENSE_DESCRIPTION: u16 = 13;
+pub const LICENSE_DESCRIPTION: NameId = 13;
 /// URL where additional licensing information can be found.
-pub const LICENSE_URL: u16 = 14;
+pub const LICENSE_URL: NameId = 14;
 /// Typographic family name.
-pub const TYPOGRAPHIC_FAMILY_NAME: u16 = 16;
+pub const TYPOGRAPHIC_FAMILY_NAME: NameId = 16;
 /// Typographic subfamily name.
-pub const TYPOGRAPHIC_SUBFAMILY_NAME: u16 = 17;
+pub const TYPOGRAPHIC_SUBFAMILY_NAME: NameId = 17;
 /// Compatible full name (Macintosh only).
-pub const COMPATIBLE_FULL_NAME: u16 = 18;
+pub const COMPATIBLE_FULL_NAME: NameId = 18;
 /// Sample text.
-pub const SAMPLE_TEXT: u16 = 19;
+pub const SAMPLE_TEXT: NameId = 19;
 /// PostScript CID findfont name.
-pub const POSTSCRIPT_CID_NAME: u16 = 20;
+pub const POSTSCRIPT_CID_NAME: NameId = 20;
 /// WWS family name.
-pub const WWS_FAMILY_NAME: u16 = 21;
+pub const WWS_FAMILY_NAME: NameId = 21;
 /// WWS subfamily name.
-pub const WWS_SUBFAMILY_NAME: u16 = 22;
+pub const WWS_SUBFAMILY_NAME: NameId = 22;
 /// Light background palette name.
-pub const LIGHT_BACKGROUND_PALETTE: u16 = 23;
+pub const LIGHT_BACKGROUND_PALETTE: NameId = 23;
 /// Dark background palette name.
-pub const DARK_BACKGROUND_PALETTE: u16 = 24;
+pub const DARK_BACKGROUND_PALETTE: NameId = 24;
 /// Variations PostScript name prefix.
-pub const VARIATIONS_POSTSCRIPT_NAME_PREFIX: u16 = 25;
+pub const VARIATIONS_POSTSCRIPT_NAME_PREFIX: NameId = 25;
 
 fn encoding(platform_id: u16, encoding_id: u16) -> u32 {
     match (platform_id, encoding_id) {

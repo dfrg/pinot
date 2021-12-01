@@ -1,8 +1,8 @@
 use super::parse_prelude::*;
 
 use super::{
-    avar::*, cmap::*, fvar::*, head::*, hhea::*, hmtx::*, hvar::*, maxp::*, name::*, os2::*,
-    post::*, vhea::*, vmtx::*, vorg::*, vvar::*,
+    avar::*, cmap::*, cpal::*, fvar::*, head::*, hhea::*, hmtx::*, hvar::*, maxp::*, name::*,
+    os2::*, post::*, vhea::*, vmtx::*, vorg::*, vvar::*,
 };
 
 const TTCF: Tag = Tag::new(b"ttcf");
@@ -141,6 +141,11 @@ pub trait TableProvider<'a> {
         Some(Post::new(self.table_data(POST)?))
     }
 
+    /// Returns the maximum profile table.
+    fn maxp(&self) -> Option<Maxp<'a>> {
+        Some(Maxp::new(self.table_data(MAXP)?))
+    }
+        
     /// Returns the OS/2 and Windows metrics table.
     fn os2(&self) -> Option<Os2<'a>> {
         Some(Os2::new(self.table_data(OS2)?))
@@ -185,11 +190,6 @@ pub trait TableProvider<'a> {
         Some(Vvar::new(self.table_data(VVAR)?))
     }
 
-    /// Returns the maximum profile table.
-    fn maxp(&self) -> Option<Maxp<'a>> {
-        Some(Maxp::new(self.table_data(MAXP)?))
-    }
-
     /// Returns the naming table.
     fn name(&self) -> Option<Name<'a>> {
         Some(Name::new(self.table_data(NAME)?))
@@ -208,6 +208,11 @@ pub trait TableProvider<'a> {
     /// Returns the axis variations table.
     fn avar(&self) -> Option<Avar<'a>> {
         Some(Avar::new(self.table_data(AVAR)?))
+    }
+
+    /// Returns the color palette table.
+    fn cpal(&self) -> Option<Cpal<'a>> {
+        Some(Cpal::new(self.table_data(CPAL)?))
     }
 }
 
