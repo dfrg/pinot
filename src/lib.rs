@@ -2,7 +2,11 @@
 
 #![no_std]
 
-pub mod container;
-pub mod header;
-pub mod layout;
-pub mod variation;
+pub mod parse;
+pub mod types;
+
+/// Helper module for common parsing imports.
+mod parse_prelude {
+    pub use super::parse::*;
+    pub use super::types::*;
+}

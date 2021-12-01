@@ -1,27 +1,32 @@
-//! Safe primitives for reading big endian encoded data.
+//! Parsing primitives.
+
+#![allow(dead_code)]
 
 use core::ops::Range;
 
+pub mod array;
 pub mod slice;
 
 pub use slice::Slice;
+
+use super::types::Tag;
 
 /// Parser for for reading from arbitrary offsets.
 #[derive(Copy, Clone)]
 pub struct Buffer<'a>(pub &'a [u8]);
 
 impl<'a> Buffer<'a> {
-    /// Creates a new buffer for the specified bytes.
+    /// Creates a new data instance for the specified bytes.
     pub fn new(bytes: &'a [u8]) -> Self {
         Self(bytes)
     }
 
-    /// Creates a new buffer for the specified bytes and offset.
+    /// Creates a new data instance for the specified bytes and offset.
     pub fn with_offset(bytes: &'a [u8], offset: usize) -> Option<Self> {
         Some(Self(bytes.get(offset..)?))
     }
 
-    /// Creates a new buffer with the specified range of bytes.
+    /// Creates a new data instance with the specified range of bytes.
     pub fn with_range(bytes: &'a [u8], range: Range<usize>) -> Option<Self> {
         Some(Self(bytes.get(range)?))
     }
@@ -58,7 +63,7 @@ impl<'a> Buffer<'a> {
         }
     }
 
-    /// Reads a value of the specified type at some offset.
+    /// Reads a value of the specified type at the specified offset.
     #[inline(always)]
     pub fn read<T: ReadData>(&self, offset: usize) -> Option<T> {
         T::read_data(self.0, offset)
@@ -80,46 +85,52 @@ impl<'a> Buffer<'a> {
         T::read_data_unchecked(self.0, offset)
     }
 
-    /// Reads a u8 value at some offset.
+    /// Reads a u8 value at the specified offset.
     #[inline(always)]
     pub fn read_u8(&self, offset: usize) -> Option<u8> {
         u8::read_data(self.0, offset)
     }
 
-    /// Reads a u16 value at some offset.
+    /// Reads a u16 value at the specified offset.
     #[inline(always)]
     pub fn read_u16(&self, offset: usize) -> Option<u16> {
         u16::read_data(self.0, offset)
     }
 
-    /// Reads a u24 value at some offset.
+    /// Reads a u24 value at the specified offset.
     #[inline(always)]
     pub fn read_u24(&self, offset: usize) -> Option<u32> {
         U24::read_data(self.0, offset).map(|x| x.0)
     }
 
-    /// Reads a u32 value at some offset.
+    /// Reads a u32 value at the specified offset.
     #[inline(always)]
     pub fn read_u32(&self, offset: usize) -> Option<u32> {
         u32::read_data(self.0, offset)
     }
 
-    /// Reads an i8 value at some offset.
+    /// Reads an i8 value at the specified offset.
     #[inline(always)]
     pub fn read_i8(&self, offset: usize) -> Option<i8> {
         i8::read_data(self.0, offset)
     }
 
-    /// Reads an i16 value at some offset.
+    /// Reads an i16 value at the specified offset.
     #[inline(always)]
     pub fn read_i16(&self, offset: usize) -> Option<i16> {
         i16::read_data(self.0, offset)
     }
 
-    /// Reads an i16 value at some offset.
+    /// Reads an i16 value at the specified offset.
     #[inline(always)]
     pub fn read_i32(&self, offset: usize) -> Option<i32> {
         i32::read_data(self.0, offset)
+    }
+
+    /// Reads a tag at the specified offset.
+    #[inline(always)]
+    pub fn read_tag(&self, offset: usize) -> Option<Tag> {
+        Some(Tag(self.read_u32(offset)?))
     }
 
     /// Reads a 16-bit value at the specified offset and if non-zero, returns
@@ -326,6 +337,11 @@ impl<'a> Cursor<'a> {
         self.read::<i32>()
     }
 
+    /// Reads a tag value.
+    pub fn read_tag(&mut self) -> Option<Tag> {
+        Some(Tag(self.read_u32()?))
+    }
+
     /// Reads a 16-bit value and if non-zero, returns the result added to the
     /// specified base.
     pub fn read_offset16(&mut self, base: u32) -> Option<u32> {
@@ -504,4 +520,15 @@ impl ReadData for U24 {
 
 impl ReadData for () {
     unsafe fn read_data_unchecked(_buf: &[u8], _offset: usize) -> Self {}
+}
+
+impl ReadData for [u8; 4] {
+    unsafe fn read_data_unchecked(buf: &[u8], offset: usize) -> Self {
+        [
+            *buf.get_unchecked(offset),
+            *buf.get_unchecked(offset + 1),
+            *buf.get_unchecked(offset + 2),
+            *buf.get_unchecked(offset + 3),
+        ]
+    }
 }
