@@ -13,6 +13,7 @@ pub mod os2;
 pub mod parse;
 pub mod post;
 pub mod types;
+pub mod var;
 pub mod vhea;
 pub mod vmtx;
 
