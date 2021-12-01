@@ -113,6 +113,30 @@ where
     }
 }
 
+impl<T: ReadData + PartialEq> PartialEq for Slice<'_, T> {
+    fn eq(&self, other: &Self) -> bool {
+        if self.len() == other.len() {
+            self.iter().eq(other.iter())
+        } else {
+            false
+        }
+    }
+}
+
+impl<T: ReadData + PartialEq> Eq for Slice<'_, T> {}
+
+impl<T: ReadData + PartialOrd> PartialOrd for Slice<'_, T> {
+    fn partial_cmp(&self, other: &Self) -> Option<core::cmp::Ordering> {
+        self.iter().partial_cmp(other.iter())
+    }
+}
+
+impl<T: ReadData + Ord> Ord for Slice<'_, T> {
+    fn cmp(&self, other: &Self) -> core::cmp::Ordering {
+        self.iter().cmp(other.iter())
+    }
+}
+
 /// Iterator over the elements of a slice.
 #[derive(Clone)]
 pub struct Iter<'a, T: ReadData> {
