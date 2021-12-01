@@ -8,6 +8,7 @@ pub mod fvar;
 pub mod head;
 pub mod hhea;
 pub mod hmtx;
+pub mod hvar;
 pub mod maxp;
 pub mod os2;
 pub mod parse;
@@ -16,6 +17,8 @@ pub mod types;
 pub mod var;
 pub mod vhea;
 pub mod vmtx;
+pub mod vorg;
+pub mod vvar;
 
 mod font;
 
