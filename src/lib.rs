@@ -2,6 +2,7 @@
 
 #![no_std]
 
+pub mod avar;
 pub mod cmap;
 pub mod fvar;
 pub mod head;
