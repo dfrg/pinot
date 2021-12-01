@@ -10,6 +10,7 @@ pub mod hhea;
 pub mod hmtx;
 pub mod hvar;
 pub mod maxp;
+pub mod name;
 pub mod os2;
 pub mod parse;
 pub mod post;

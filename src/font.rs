@@ -1,8 +1,8 @@
 use super::parse_prelude::*;
 
 use super::{
-    avar::*, cmap::*, fvar::*, head::*, hhea::*, hmtx::*, hvar::*, maxp::*, os2::*, post::*,
-    vhea::*, vmtx::*, vorg::*, vvar::*,
+    avar::*, cmap::*, fvar::*, head::*, hhea::*, hmtx::*, hvar::*, maxp::*, name::*, os2::*,
+    post::*, vhea::*, vmtx::*, vorg::*, vvar::*,
 };
 
 const TTCF: Tag = Tag::new(b"ttcf");
@@ -188,6 +188,11 @@ pub trait TableProvider<'a> {
     /// Returns the maximum profile table.
     fn maxp(&self) -> Option<Maxp<'a>> {
         Some(Maxp::new(self.table_data(MAXP)?))
+    }
+
+    /// Returns the naming table.
+    fn name(&self) -> Option<Name<'a>> {
+        Some(Name::new(self.table_data(NAME)?))
     }
 
     /// Returns the character mapping table.
