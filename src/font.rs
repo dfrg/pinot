@@ -1,6 +1,9 @@
 use super::parse_prelude::*;
 
-use super::{avar::*, cmap::*, fvar::*, head::*, hhea::*, maxp::*, os2::*, post::*, vhea::*};
+use super::{
+    avar::*, cmap::*, fvar::*, head::*, hhea::*, hmtx::*, maxp::*, os2::*, post::*, vhea::*,
+    vmtx::*,
+};
 
 const TTCF: Tag = Tag::new(b"ttcf");
 const OTTO: Tag = Tag::new(b"OTTO");
@@ -148,9 +151,23 @@ pub trait TableProvider<'a> {
         Some(Hhea::new(self.table_data(HHEA)?))
     }
 
+    /// Returns the horizontal metrics table.
+    fn hmtx(&self) -> Option<Hmtx<'a>> {
+        let num_glyphs = self.maxp()?.num_glyphs();
+        let num_metrics = self.hhea()?.num_long_metrics();
+        Some(Hmtx::new(self.table_data(HMTX)?, num_glyphs, num_metrics))
+    }
+
     /// Returns the vertical header table.
     fn vhea(&self) -> Option<Vhea<'a>> {
         Some(Vhea::new(self.table_data(VHEA)?))
+    }
+
+    /// Returns the vertical metrics table.
+    fn vmtx(&self) -> Option<Vmtx<'a>> {
+        let num_glyphs = self.maxp()?.num_glyphs();
+        let num_metrics = self.vhea()?.num_long_metrics();
+        Some(Vmtx::new(self.table_data(VMTX)?, num_glyphs, num_metrics))
     }
 
     /// Returns the maximum profile table.
@@ -171,7 +188,7 @@ pub trait TableProvider<'a> {
     /// Returns the axis variations table.
     fn avar(&self) -> Option<Avar<'a>> {
         Some(Avar::new(self.table_data(AVAR)?))
-    }    
+    }
 }
 
 impl<'a> TableProvider<'a> for FontRef<'a> {

@@ -7,12 +7,14 @@ pub mod cmap;
 pub mod fvar;
 pub mod head;
 pub mod hhea;
+pub mod hmtx;
 pub mod maxp;
 pub mod os2;
 pub mod parse;
 pub mod post;
 pub mod types;
 pub mod vhea;
+pub mod vmtx;
 
 mod font;
 
