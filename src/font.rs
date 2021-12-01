@@ -1,6 +1,6 @@
 use super::parse_prelude::*;
 
-use super::{cmap::*, head::*, hhea::*, maxp::*, os2::*, post::*, vhea::*};
+use super::{cmap::*, fvar::*, head::*, hhea::*, maxp::*, os2::*, post::*, vhea::*};
 
 const TTCF: Tag = Tag::new(b"ttcf");
 const OTTO: Tag = Tag::new(b"OTTO");
@@ -161,6 +161,11 @@ pub trait TableProvider<'a> {
     /// Returns the character mapping table.
     fn cmap(&self) -> Option<Cmap<'a>> {
         Some(Cmap::new(self.table_data(CMAP)?))
+    }
+
+    /// Returns the font variations table.
+    fn fvar(&self) -> Option<Fvar<'a>> {
+        Some(Fvar::new(self.table_data(FVAR)?))
     }
 }
 

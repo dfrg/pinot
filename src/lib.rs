@@ -3,6 +3,7 @@
 #![no_std]
 
 pub mod cmap;
+pub mod fvar;
 pub mod head;
 pub mod hhea;
 pub mod maxp;
