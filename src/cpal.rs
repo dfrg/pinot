@@ -63,7 +63,7 @@ impl<'a> Cpal<'a> {
             if labels_offset == 0 {
                 return None;
             }
-            Some(d.read_u16(labels_offset + index as usize * 2)?)
+            d.read_u16(labels_offset + index as usize * 2)
         })();
         let flags = (|| {
             if self.version == 0 {

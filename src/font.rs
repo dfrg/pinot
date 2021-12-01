@@ -1,8 +1,23 @@
 use super::parse_prelude::*;
 
 use super::{
-    avar::*, cmap::*, cpal::*, fvar::*, head::*, hhea::*, hmtx::*, hvar::*, maxp::*, name::*,
-    os2::*, post::*, vhea::*, vmtx::*, vorg::*, vvar::*,
+    avar::*,
+    cmap::*,
+    colr::{Colr, COLR},
+    cpal::*,
+    fvar::*,
+    head::*,
+    hhea::*,
+    hmtx::*,
+    hvar::*,
+    maxp::*,
+    name::*,
+    os2::*,
+    post::*,
+    vhea::*,
+    vmtx::*,
+    vorg::*,
+    vvar::*,
 };
 
 const TTCF: Tag = Tag::new(b"ttcf");
@@ -138,13 +153,24 @@ impl<'a> FontRef<'a> {
         None
     }
 
-    /// Returns an iterator over pairs of table records with their associated
-    /// data.
-    pub fn tables(&self) -> impl Iterator<Item = (TableRecord, &'a [u8])> + 'a + Clone {
+    /// Returns an iterator over the tables in the font.
+    pub fn tables(&self) -> impl Iterator<Item = Table<'a>> + 'a + Clone {
         let data = self.data;
-        self.records()
-            .iter()
-            .filter_map(move |record| Some((record, data.get(record.data_range())?)))
+        self.records().iter().filter_map(move |record| {
+            Some(Table {
+                data: data.get(record.data_range())?,
+                record,
+            })
+        })
+    }
+
+    /// Returns the table for the specified tag.
+    pub fn find_table(&self, tag: Tag) -> Option<Table<'a>> {
+        let record = self.find_record(tag)?;
+        Some(Table {
+            data: self.data.get(record.data_range())?,
+            record,
+        })
     }
 }
 
@@ -279,6 +305,11 @@ pub trait TableProvider<'a> {
     /// Returns the color palette table.
     fn cpal(&self) -> Option<Cpal<'a>> {
         Some(Cpal::new(self.table_data(CPAL)?))
+    }
+
+    /// Returns the color table.
+    fn colr(&self) -> Option<Colr<'a>> {
+        Some(Colr::new(self.table_data(COLR)?))
     }
 }
 

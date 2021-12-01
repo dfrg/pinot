@@ -32,3 +32,12 @@ impl TableRecord {
         start..start + self.len as usize
     }
 }
+
+/// Table record and its associated data.
+#[derive(Copy, Clone)]
+pub struct Table<'a> {
+    /// Data for the table.
+    pub data: &'a [u8],
+    /// Record for the table.
+    pub record: TableRecord,
+}
