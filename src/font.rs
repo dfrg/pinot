@@ -1,6 +1,6 @@
 use super::parse_prelude::*;
 
-use super::{cmap::*, fvar::*, head::*, hhea::*, maxp::*, os2::*, post::*, vhea::*};
+use super::{avar::*, cmap::*, fvar::*, head::*, hhea::*, maxp::*, os2::*, post::*, vhea::*};
 
 const TTCF: Tag = Tag::new(b"ttcf");
 const OTTO: Tag = Tag::new(b"OTTO");
@@ -167,6 +167,11 @@ pub trait TableProvider<'a> {
     fn fvar(&self) -> Option<Fvar<'a>> {
         Some(Fvar::new(self.table_data(FVAR)?))
     }
+
+    /// Returns the axis variations table.
+    fn avar(&self) -> Option<Avar<'a>> {
+        Some(Avar::new(self.table_data(AVAR)?))
+    }    
 }
 
 impl<'a> TableProvider<'a> for FontRef<'a> {
