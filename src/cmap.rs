@@ -24,15 +24,15 @@ impl<'a> Cmap<'a> {
         self.0.read(0).unwrap_or(0)
     }
 
-    /// Returns the array of encodings.
-    pub fn encodings(&self) -> Slice<'a, EncodingRecord> {
+    /// Returns the array of encoding records.
+    pub fn records(&self) -> Slice<'a, EncodingRecord> {
         let len = self.0.read_u16(2).unwrap_or_default() as usize;
         self.0.read_slice(4, len).unwrap_or_default()
     }
 
     /// Returns an iterator over the subtables.
     pub fn subtables(self) -> impl Iterator<Item = Subtable<'a>> + 'a + Clone {
-        self.encodings().iter().map(move |encoding| Subtable {
+        self.records().iter().map(move |encoding| Subtable {
             cmap: self,
             encoding,
         })

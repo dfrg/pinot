@@ -4,6 +4,7 @@
 
 pub mod avar;
 pub mod cmap;
+pub mod colr;
 pub mod cpal;
 pub mod fvar;
 pub mod head;

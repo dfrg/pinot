@@ -80,6 +80,72 @@ impl<'a> FontRef<'a> {
     pub fn kind(&self) -> Option<FontKind> {
         FontKind::parse(self.data, self.offset)
     }
+
+    /// Returns the number of available tables in the font.
+    pub fn len(&self) -> u16 {
+        let base = self.offset as usize;
+        let b = Buffer::new(self.data);
+        base.checked_add(4)
+            .map(|offset| b.read_u16(offset))
+            .flatten()
+            .unwrap_or(0)
+    }
+
+    /// Returns true if the font does not contain any tables.
+    pub fn is_empty(&self) -> bool {
+        self.len() == 0
+    }
+
+    /// Returns the list of table records in the font.
+    pub fn records(&self) -> Slice<'a, TableRecord> {
+        let base = self.offset as usize;
+        let d = Buffer::new(self.data);
+        let len = self.len() as usize;
+        d.read_slice(base + 12, len as usize).unwrap_or_default()
+    }
+
+    /// Returns the table record with the specified tag.
+    pub fn find_record(&self, tag: Tag) -> Option<TableRecord> {
+        let base = self.offset as usize;
+        let b = Buffer::new(self.data);
+        let len = b.read_u16(base.checked_add(4)?)? as usize;
+        let record_base = base.checked_add(12)?;
+        let reclen = 16usize;
+        let mut lo = 0;
+        let mut hi = len;
+        while lo < hi {
+            use core::cmp::Ordering::*;
+            let i = (lo + hi) / 2;
+            let recbase = reclen.checked_mul(i)?.checked_add(record_base)?;
+            let mut s = b.cursor_at(recbase)?;
+            let table_tag = s.read_tag()?;
+            match tag.cmp(&table_tag) {
+                Less => hi = i,
+                Greater => lo = i + 1,
+                Equal => {
+                    let checksum = s.read_u32()?;
+                    let offset = s.read_u32()?;
+                    let len = s.read_u32()?;
+                    return Some(TableRecord {
+                        tag,
+                        checksum,
+                        offset,
+                        len,
+                    });
+                }
+            }
+        }
+        None
+    }
+
+    /// Returns an iterator over pairs of table records with their associated
+    /// data.
+    pub fn tables(&self) -> impl Iterator<Item = (TableRecord, &'a [u8])> + 'a + Clone {
+        let data = self.data;
+        self.records()
+            .iter()
+            .filter_map(move |record| Some((record, data.get(record.data_range())?)))
+    }
 }
 
 /// Borrowed reference to the content of a font file.
@@ -121,7 +187,7 @@ impl<'a> FontDataRef<'a> {
     }
 
     /// Returns an iterator over the available fonts.
-    pub fn iter(self) -> impl Iterator<Item = FontRef<'a>> + 'a + Clone {
+    pub fn fonts(self) -> impl Iterator<Item = FontRef<'a>> + 'a + Clone {
         (0..self.len()).filter_map(move |index| self.get(index))
     }
 }
@@ -145,7 +211,7 @@ pub trait TableProvider<'a> {
     fn maxp(&self) -> Option<Maxp<'a>> {
         Some(Maxp::new(self.table_data(MAXP)?))
     }
-        
+
     /// Returns the OS/2 and Windows metrics table.
     fn os2(&self) -> Option<Os2<'a>> {
         Some(Os2::new(self.table_data(OS2)?))
@@ -217,14 +283,14 @@ pub trait TableProvider<'a> {
 }
 
 impl<'a> TableProvider<'a> for FontRef<'a> {
-    fn table_data(&self, _tag: Tag) -> Option<&'a [u8]> {
-        None
+    fn table_data(&self, tag: Tag) -> Option<&'a [u8]> {
+        self.data.get(self.find_record(tag)?.data_range())
     }
 }
 
 impl<'a> TableProvider<'a> for &'_ FontRef<'a> {
-    fn table_data(&self, _tag: Tag) -> Option<&'a [u8]> {
-        None
+    fn table_data(&self, tag: Tag) -> Option<&'a [u8]> {
+        self.data.get(self.find_record(tag)?.data_range())
     }
 }
 
