@@ -101,7 +101,7 @@ impl<'a> MultipleSubst1<'a> {
         let base = self.0.record.offset as usize;
         let array_base = base + data.read::<u16>(base + 6 + coverage as usize * 2)? as usize;
         let array_len = data.read::<u16>(array_base)? as usize;
-        data.read_slice::<u16>(array_base, array_len)
+        data.read_slice::<u16>(array_base + 2, array_len)
     }
 }
 
