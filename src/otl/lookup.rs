@@ -500,7 +500,7 @@ impl fmt::Debug for Subtable<'_> {
 }
 
 /// Kind of a subtable.
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug)]
 pub enum SubtableKind<'a> {
     /// Single substitution format 1.
     SingleSubst1(SingleSubst1<'a>),
