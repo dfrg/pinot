@@ -10,3 +10,6 @@ categories = ["graphics", "text-processing"]
 repository = "https://github.com/dfrg/pinot"
 homepage = "https://github.com/dfrg/pinot"
 readme = "README.md"
+
+[dependencies]
+memmap = { version =  "0.7" }
