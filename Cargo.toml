@@ -10,3 +10,10 @@ categories = ["graphics", "text-processing"]
 repository = "https://github.com/dfrg/pinot"
 homepage = "https://github.com/dfrg/pinot"
 readme = "README.md"
+
+[features]
+default = ["write"]
+write = []
+
+[dependencies]
+zerocopy = "0.6.1"

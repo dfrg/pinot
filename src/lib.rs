@@ -1,12 +1,16 @@
 //! Fast, high-fidelity OpenType parser.
 
 #![no_std]
+#![cfg(feature = "write")]
+extern crate alloc;
 
 pub mod avar;
+pub mod binary;
 pub mod cmap;
 pub mod colr;
 pub mod cpal;
 pub mod fvar;
+pub mod fvar1;
 pub mod gdef;
 pub mod gpos;
 pub mod gsub;
