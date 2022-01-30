@@ -13,6 +13,7 @@ use super::{
     hhea::*,
     hmtx::*,
     hvar::*,
+    math::*,
     maxp::*,
     name::*,
     os2::*,
@@ -328,6 +329,11 @@ pub trait TableProvider<'a> {
     /// Returns the glyph positioning table.
     fn gpos(&self) -> Option<Gpos<'a>> {
         Some(Gpos::new(self.table_data(GPOS)?, self.gdef()))
+    }
+
+    /// Returns the mathemetical typesetting table.
+    fn math(&self) -> Option<Math<'a>> {
+        Some(Math::new(self.table_data(MATH)?))
     }
 }
 
