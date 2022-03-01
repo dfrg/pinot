@@ -13,7 +13,7 @@ pub struct Coverage<'a> {
 }
 
 impl<'a> Coverage<'a> {
-    pub(super) fn new(data: Buffer<'a>, offset: u32) -> Self {
+    pub(crate) fn new(data: Buffer<'a>, offset: u32) -> Self {
         Self { data, offset }
     }
 
