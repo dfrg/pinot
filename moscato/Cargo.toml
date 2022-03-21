@@ -11,4 +11,4 @@ homepage = "https://github.com/dfrg/pinot/moscato"
 readme = "README.md"
 
 [dependencies]
-pinot = { path = "../" }
+pinot = "0.1.5"

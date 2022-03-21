@@ -6,9 +6,15 @@ version = 3
 name = "moscato"
 version = "0.1.0"
 dependencies = [
- "pinot",
+ "pinot 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
 name = "pinot"
 version = "0.1.5"
+
+[[package]]
+name = "pinot"
+version = "0.1.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6ba3013ff85036c414a4a3cf826135db204de2bd80d684728550e7130421809a"
