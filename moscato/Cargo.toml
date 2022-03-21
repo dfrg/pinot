@@ -1,0 +1,14 @@
+[package]
+name = "moscato"
+version = "0.1.0"
+edition = "2021"
+description = "Outline scaler for OpenType glyphs."
+license = "MIT OR Apache-2.0"
+keywords = ["glyph", "loader", "scaler", "opentype", "truetype"]
+categories = ["graphics", "text-processing"]
+repository = "https://github.com/dfrg/pinot"
+homepage = "https://github.com/dfrg/pinot/moscato"
+readme = "README.md"
+
+[dependencies]
+pinot = { path = "../" }

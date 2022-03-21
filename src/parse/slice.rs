@@ -13,7 +13,8 @@ pub struct Slice<'a, T: ReadData> {
 }
 
 impl<'a, T: ReadData> Slice<'a, T> {
-    pub(crate) fn new(data: &'a [u8]) -> Self {
+    /// Creates a new slice for the specified data.
+    pub fn new(data: &'a [u8]) -> Self {
         Self {
             data,
             len: data.len() / T::SIZE,
