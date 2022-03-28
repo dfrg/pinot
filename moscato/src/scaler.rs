@@ -202,12 +202,16 @@ fn load_color(
         }
         Paint::Glyph { paint, id } => {
             let path_index = glyph.num_paths();
-            if load_glyph(scaler, id, glyph) {
-                glyph.push_command(Command::PushClip(path_index));
-                if let Some(paint) = paint.get() {
-                    load_color(scaler, palette, &paint, glyph, depth + 1);
+            if let Some(paint) = paint.get() {
+                if load_glyph(scaler, id, glyph) {
+                    if let Some((brush, transform)) = load_leaf(scaler, palette, paint) {
+                        glyph.push_command(Command::SimpleFill(path_index, brush, transform));
+                    } else {
+                        glyph.push_command(Command::PushClip(path_index));
+                        load_color(scaler, palette, &paint, glyph, depth + 1);
+                        glyph.push_command(Command::PopClip);
+                    }
                 }
-                glyph.push_command(Command::PopClip);
             }
         }
         Paint::ColorGlyph { id } => {
@@ -488,6 +492,128 @@ fn flatten_transform<'a>(paint: &Paint<'a>) -> Paint<'a> {
             }
         }
         _ => *paint,
+    }
+}
+
+fn is_leaf(paint: &Paint) -> bool {
+    match paint {
+        Paint::Solid { .. }
+        | Paint::LinearGradient { .. }
+        | Paint::RadialGradient { .. }
+        | Paint::SweepGradient { .. } => true,
+        _ => false,
+    }
+}
+
+fn load_leaf(
+    scaler: &mut Scaler,
+    palette: u16,
+    mut leaf_paint: Paint,
+) -> Option<(super::color::Brush, Option<Transform>)> {
+    use super::color::*;
+    use pinot::cpal::Color;
+    let color_data = scaler.font.color.unwrap();
+    let colr = color_data.colr;
+    let cpal = color_data.cpal;
+    let pal = cpal.get(palette).or_else(|| cpal.get(0)).unwrap();
+    const DEFAULT_COLOR: Color = Color {
+        r: 128,
+        g: 128,
+        b: 128,
+        a: 255,
+    };
+    let mut transform = None;
+    leaf_paint = match leaf_paint {
+        Paint::Transform {
+            paint,
+            xx,
+            yx,
+            xy,
+            yy,
+            dx,
+            dy,
+            ..
+        } => {
+            if let Some(paint) = paint.get() {
+                if is_leaf(&paint) {
+                    transform = Some(Transform {
+                        xx,
+                        yx,
+                        xy,
+                        yy,
+                        dx,
+                        dy,
+                    });
+                    paint
+                } else {
+                    leaf_paint
+                }
+            } else {
+                leaf_paint
+            }
+        }
+        _ => leaf_paint,
+    };
+    match leaf_paint {
+        Paint::Solid {
+            palette_index,
+            alpha,
+            ..
+        } => {
+            let mut color = pal
+                .colors
+                .get(palette_index as usize)
+                .unwrap_or(DEFAULT_COLOR);
+            if alpha != 1.0 {
+                color.a = (color.a as f32 * alpha) as u8;
+            }
+            Some((Brush::Solid(color), transform))
+        }
+        Paint::LinearGradient {
+            color_line,
+            x0,
+            y0,
+            x1,
+            y1,
+            x2,
+            y2,
+            ..
+        } => {
+            let stops = convert_stops(&color_line, &pal);
+            Some((
+                Brush::LinearGradient(LinearGradient {
+                    start: Point::new(x0, y0),
+                    end: Point::new(x1, y1),
+                    stops,
+                    extend: color_line.extend(),
+                }),
+                transform,
+            ))
+        }
+        Paint::RadialGradient {
+            color_line,
+            x0,
+            y0,
+            radius0,
+            x1,
+            y1,
+            radius1,
+            ..
+        } => {
+            let stops = convert_stops(&color_line, &pal);
+            Some((
+                Brush::RadialGradient(RadialGradient {
+                    center0: Point::new(x0, y0),
+                    radius0,
+                    center1: Point::new(x1, y1),
+                    radius1,
+                    stops,
+                    extend: color_line.extend(),
+                }),
+                transform,
+            ))
+        }
+        _ => None,
     }
 }
 

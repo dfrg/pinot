@@ -14,7 +14,7 @@ pub enum Command {
     PopTransform,
     PushClip(PathIndex),
     PopClip,
-    SimpleFill(PathIndex, Brush),
+    SimpleFill(PathIndex, Brush, Option<Transform>),
     Fill(Brush, Option<Transform>),
     BeginBlend(Bounds, CompositeMode),
     EndBlend,
