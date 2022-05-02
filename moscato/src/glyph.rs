@@ -72,7 +72,7 @@ pub struct Path<'a> {
 }
 
 impl<'a> Path<'a> {
-    pub fn elements(&self) -> impl Iterator<Item = Element> + 'a {
+    pub fn elements(&self) -> impl Iterator<Item = Element> + 'a + Clone {
         let mut i = 0;
         let copy = *self;
         copy.verbs.iter().map(move |verb| match verb {
