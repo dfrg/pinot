@@ -142,6 +142,10 @@ pub struct Scaler<'a> {
 }
 
 impl<'a> Scaler<'a> {
+    pub fn normalized_coords(&self) -> &'a [i16] {
+        self.coords
+    }
+
     pub fn glyph(&mut self, gid: u16) -> Option<Glyph> {
         let mut glyph = Glyph::default();
         if load_glyph(self, gid, &mut glyph) {
