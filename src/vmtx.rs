@@ -51,7 +51,7 @@ impl<'a> Vmtx<'a> {
     }
 
     /// Returns the slice of vertical metrics.
-    pub fn hmetrics(&self) -> Slice<'a, VMetric> {
+    pub fn vmetrics(&self) -> Slice<'a, VMetric> {
         self.data
             .read_slice(0, self.num_vmetrics as usize)
             .unwrap_or_default()
