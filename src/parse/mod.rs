@@ -433,9 +433,6 @@ pub trait ReadData: Sized + Copy + Clone {
     unsafe fn read_data_unchecked(buf: &[u8], offset: usize) -> Self;
 }
 
-pub(crate) const USE_UNALIGNED_READS_LE: bool =
-    cfg!(any(target_arch = "x86", target_arch = "x86_64"));
-
 impl ReadData for u8 {
     unsafe fn read_data_unchecked(buf: &[u8], offset: usize) -> Self {
         *buf.get_unchecked(offset)
@@ -451,11 +448,7 @@ impl ReadData for i8 {
 impl ReadData for u16 {
     #[inline(always)]
     unsafe fn read_data_unchecked(buf: &[u8], offset: usize) -> Self {
-        if USE_UNALIGNED_READS_LE {
-            (*(buf.as_ptr().add(offset) as *const u16)).swap_bytes()
-        } else {
-            (*buf.get_unchecked(offset) as u16) << 8 | *buf.get_unchecked(offset + 1) as u16
-        }
+        (*buf.get_unchecked(offset) as u16) << 8 | *buf.get_unchecked(offset + 1) as u16
     }
 }
 
@@ -467,14 +460,10 @@ impl ReadData for i16 {
 
 impl ReadData for u32 {
     unsafe fn read_data_unchecked(buf: &[u8], offset: usize) -> Self {
-        if USE_UNALIGNED_READS_LE {
-            (*(buf.as_ptr().add(offset) as *const u32)).swap_bytes()
-        } else {
-            (*buf.get_unchecked(offset) as u32) << 24
-                | (*buf.get_unchecked(offset + 1) as u32) << 16
-                | (*buf.get_unchecked(offset + 2) as u32) << 8
-                | *buf.get_unchecked(offset + 3) as u32
-        }
+        (*buf.get_unchecked(offset) as u32) << 24
+            | (*buf.get_unchecked(offset + 1) as u32) << 16
+            | (*buf.get_unchecked(offset + 2) as u32) << 8
+            | *buf.get_unchecked(offset + 3) as u32
     }
 }
 
@@ -486,18 +475,14 @@ impl ReadData for i32 {
 
 impl ReadData for u64 {
     unsafe fn read_data_unchecked(buf: &[u8], offset: usize) -> Self {
-        if USE_UNALIGNED_READS_LE {
-            (*(buf.as_ptr().add(offset) as *const u64)).swap_bytes()
-        } else {
-            (*buf.get_unchecked(offset) as u64) << 56
-                | (*buf.get_unchecked(offset + 1) as u64) << 48
-                | (*buf.get_unchecked(offset + 2) as u64) << 40
-                | (*buf.get_unchecked(offset + 3) as u64) << 32
-                | (*buf.get_unchecked(offset + 4) as u64) << 24
-                | (*buf.get_unchecked(offset + 5) as u64) << 16
-                | (*buf.get_unchecked(offset + 6) as u64) << 8
-                | *buf.get_unchecked(offset + 7) as u64
-        }
+        (*buf.get_unchecked(offset) as u64) << 56
+            | (*buf.get_unchecked(offset + 1) as u64) << 48
+            | (*buf.get_unchecked(offset + 2) as u64) << 40
+            | (*buf.get_unchecked(offset + 3) as u64) << 32
+            | (*buf.get_unchecked(offset + 4) as u64) << 24
+            | (*buf.get_unchecked(offset + 5) as u64) << 16
+            | (*buf.get_unchecked(offset + 6) as u64) << 8
+            | *buf.get_unchecked(offset + 7) as u64
     }
 }
 
